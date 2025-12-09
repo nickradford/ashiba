@@ -1,6 +1,6 @@
 import pc from "picocolors";
 import { readdir, stat } from "node:fs/promises";
-import { type TemplateConfig } from "./config";
+import { type TemplateConfig } from "@core/config";
 import path from "node:path";
 
 type Values = {

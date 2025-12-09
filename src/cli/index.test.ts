@@ -1,5 +1,6 @@
 import { test, expect, beforeAll, afterAll } from "bun:test";
 import { rmSync } from "node:fs";
+import { createProgram } from "./index";
 
 beforeAll(async () => {
   // Create test template for CLI testing
@@ -31,10 +32,24 @@ afterAll(() => {
   }
 });
 
-test("CLI module exports parsed config", async () => {
-  // Import the CLI module to ensure it parses correctly
-  const cliModule = await import("./index");
-  expect(cliModule).toBeDefined();
+test("createProgram initializes with name and version", () => {
+  const program = createProgram();
+  expect(program.name()).toBe("ashiba");
+  expect(program.version()).toBeDefined();
+});
+
+test("createProgram registers new command", () => {
+  const program = createProgram();
+  const newCmd = program.commands.find(c => c.name() === "new");
+  expect(newCmd).toBeDefined();
+  expect(newCmd?.description()).toContain("Scaffold a new");
+});
+
+test("createProgram registers list command", () => {
+  const program = createProgram();
+  const listCmd = program.commands.find(c => c.name() === "list");
+  expect(listCmd).toBeDefined();
+  expect(listCmd?.description()).toContain("List all available");
 });
 
 test("Template files are loaded from .ashiba directory", async () => {

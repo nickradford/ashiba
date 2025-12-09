@@ -1,5 +1,5 @@
 import { input, select, confirm } from "@inquirer/prompts";
-import numberWheel from "./components/number-wheel";
+import numberWheel from "@core/components/number-wheel";
 import {
   ConfirmField,
   NumberField,
@@ -7,7 +7,7 @@ import {
   type TemplateConfig,
   TemplateField,
   TextField,
-} from "./config";
+} from "@core/config";
 
 export type Question =
   | TextQuestion

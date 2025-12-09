@@ -12,7 +12,7 @@ import {
   type Theme,
 } from "@inquirer/core";
 import { type PartialDeep, type Prompt } from "@inquirer/type";
-import chalk from "picocolors";
+import pc from "picocolors";
 
 type Config = {
   message: string;
@@ -80,13 +80,13 @@ export default createPrompt<number, Config>((config, done) => {
   });
 
   const message = theme.style.message(config.message, status);
-  let formattedValue = chalk.green(String(value));
+  let formattedValue = pc.green(String(value));
 
   if (status === "done") {
     formattedValue = theme.style.answer(String(value));
   }
 
-  let arrows = chalk.gray(`\n\n↑↓ +/- • ⏎ select`);
+  let arrows = pc.gray(`\n\n↑↓ +/- • ⏎ select`);
 
   return `${prefix} ${message} ${formattedValue} ${status === "idle" ? arrows : ""}`;
 });

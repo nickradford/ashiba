@@ -11,8 +11,8 @@
     "@ltd/j-toml": "^1.0.0",
     "arktype": "^2.1.28",
     "ashiba": ".",
-    "picocolors": "^1.0.0",
-    "zlye": "^0.4.4"
+    "commander": "^14.0.2",
+    "picocolors": "^1.0.0"
   },
   "devDependencies": {
     "@inquirer/testing": "^2.1.0"

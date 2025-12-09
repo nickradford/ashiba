@@ -100,7 +100,6 @@ function normalizeKeys(config: any): TemplateConfig {
 
     if (field.type === "number") {
       field.__type = "number";
-      console.log(field);
     }
 
     // infer types if not declared
@@ -113,8 +112,6 @@ function normalizeKeys(config: any): TemplateConfig {
       field.__type = "string";
     }
   }
-
-  console.log({ config });
 
   return config as TemplateConfig;
 }
@@ -158,8 +155,6 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
       throw new Error(valid.summary);
     }
   }
-
-  console.log({ normalized });
 
   return normalized;
 }

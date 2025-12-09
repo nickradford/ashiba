@@ -7,9 +7,8 @@ export interface TemplateMetadata {
 }
 
 export async function listTemplates(): Promise<string[]> {
-  // Resolve from project root (where .ashiba directory is)
-  const projectRoot = import.meta.dir.split("src")[0];
-  const ashibaDirPath = `${projectRoot}.ashiba`;
+  // Resolve from current working directory
+  const ashibaDirPath = `${process.cwd()}/.ashiba`;
   
   try {
     const entries = readdirSync(ashibaDirPath);

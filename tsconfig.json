@@ -21,6 +21,15 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
+    // Path aliases
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@cli/*": ["src/cli/*"],
+      "@core/*": ["src/core/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
