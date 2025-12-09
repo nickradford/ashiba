@@ -8,6 +8,7 @@ Define reusable project templates using TOML, and generate files in seconds from
 ## Todo
 
 - [x] actually scaffold the template out with variable interpolation
+- [ ] `ashiba init` create the base ashiba file structure
 - [ ] `ashiba list` list all templates in the current project
 - [ ] `ashiba doctor` find issues with the templates
 - [ ] `ashiba ashiba <template>` interactive template generator
