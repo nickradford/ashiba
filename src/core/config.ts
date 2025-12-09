@@ -2,9 +2,6 @@ import * as TOML from "@ltd/j-toml";
 import pc from "picocolors";
 import { type } from "arktype";
 
-// filename: template-config.ts
-import { type } from "arktype";
-
 // 1) Runtime value type for each dynamic entry. Expandable over time.
 // You can add more fields as needed (e.g., "default", "required", etc.)
 export const TemplateField = type({
@@ -22,21 +19,22 @@ export type TemplateConfig<
   Order extends readonly string[] = readonly string[],
 > = {
   order: Order extends readonly string[] ? Order : readonly string[];
+  description?: string; // optional template-level description
 } & {
   [K in Order[number]]: TemplateField;
 } & {
   // allow additional dynamic keys not necessarily listed in `order`
-  [key: string]: TemplateField | Order;
+  [key: string]: TemplateField | Order | string | undefined;
 };
 
 // 3) Runtime validator:
 // - order must be an array of strings
-// - any string-keyed property must be a TemplateField
+// - any string-keyed property can be a TemplateField or string (for description)
 // - keep the object "open" so future keys are allowed
 export const TemplateConfigRuntime = type({
   order: "string[]", // array of strings (any length)
-  // any string key maps to a TemplateField
-  "[string]": TemplateField,
+  // any string key maps to an object (TemplateField) or string (description)
+  "[string]": "object | string",
 });
 
 // Optional: stricter runtime that ensures every key in order exists.
@@ -72,6 +70,5 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
     throw new Error(config.summary);
   }
 
-  console.log("RETURNING THE CONFIG");
   return config;
 }

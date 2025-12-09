@@ -13,7 +13,9 @@
   },
   "scripts": {
     "dev": "bun run src/cli/index.ts",
-    "build": "bun build --compile src/cli/index.ts --outfile dist/ashiba"
+    "build": "bun build --compile src/cli/index.ts --outfile dist/ashiba",
+    "check": "bunx tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@ltd/j-toml": "^1.0.0",

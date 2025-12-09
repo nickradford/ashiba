@@ -1,3 +1,4 @@
+description = "A test scaffolding template"
 order = ["name", "author"]
 
 [name]

@@ -1,12 +1,15 @@
-import type { TemplateConfig } from "./config";
+import type { TemplateConfig, TemplateField } from "./config";
 import prompts from "prompts";
 
 export async function getPromptResponses(config: TemplateConfig) {
-  const questions = config.order.map((key) => ({
-    type: "text",
-    name: key,
-    message: config[key]?.description,
-  }));
+  const questions = config.order.map((key) => {
+    const field = config[key] as TemplateField;
+    return {
+      type: "text" as const,
+      name: key,
+      message: field?.description,
+    };
+  });
 
   const response = await prompts(questions);
   console.log(response);
