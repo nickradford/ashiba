@@ -23,7 +23,7 @@
   "description": "Blazing fast file scaffolding with Bun",
   "scripts": {
     "dev": "bun run src/cli/index.ts",
-    "build": "bun build --compile src/cli/index.ts --outfile dist/ashiba",
+    "build": "bun build --compile --minify src/cli/index.ts --outfile dist/ashiba",
     "check": "bunx tsc --noEmit",
     "test": "bun test",
     "clean:test": "rm -rf test"
