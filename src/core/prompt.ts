@@ -14,16 +14,24 @@ export function getPromptQuestionsFromConfig(
   const questions = config.order.map((key) => {
     const field = config[key] as TemplateField;
 
+    let promptStep: PromptObject;
+
     switch (field.__type) {
       case "string":
-        return textTransformer(field);
+        promptStep = textTransformer(field);
+        break;
       case "number":
-        return numberTransformer(field);
+        promptStep = numberTransformer(field);
+        break;
       case "select":
-        return selectTransformer(field);
+        promptStep = selectTransformer(field);
+        break;
       case "confirm":
-        return confirmTransformer(field);
+        promptStep = confirmTransformer(field);
     }
+
+    console.log({ field, promptStep });
+    return promptStep;
   });
 
   return questions;
@@ -49,6 +57,8 @@ export function numberTransformer(field: NumberField): PromptObject {
     name: field.__key,
     message: field.description,
     initial: field.initial,
+    increment: 1,
+    min: 0,
   };
 }
 

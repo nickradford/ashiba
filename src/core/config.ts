@@ -99,12 +99,7 @@ function normalizeKeys(config: any): TemplateConfig {
 
     if (field.type === "number") {
       field.__type = "number";
-      for (const n of ["initial"]) {
-        const val = (field as any)[n];
-        if (typeof val === "string" && !Number.isNaN(+val)) {
-          (field as any)[n] = Number(val);
-        }
-      }
+      console.log(field);
     }
 
     // infer types if not declared
@@ -117,6 +112,8 @@ function normalizeKeys(config: any): TemplateConfig {
       field.__type = "string";
     }
   }
+
+  console.log({ config });
 
   return config as TemplateConfig;
 }
@@ -160,6 +157,8 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
       throw new Error(valid.summary);
     }
   }
+
+  console.log({ normalized });
 
   return normalized;
 }
