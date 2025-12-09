@@ -20,7 +20,8 @@ export const NumberField = BaseField.and(
     __type: "'number'",
     min: "number?",
     max: "number?",
-    initial: "number?",
+    default: "number?",
+    interval: "number?",
   }),
 );
 export type NumberField = typeof NumberField.infer;

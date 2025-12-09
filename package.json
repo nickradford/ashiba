@@ -1,30 +1,27 @@
 {
   "name": "ashiba",
   "version": "0.1.0",
-  "description": "Blazing fast file scaffolding with Bun",
   "author": {
     "name": "Nick Radford",
     "email": "nick@nickradford.dev",
     "url": "https://nickradford.dev"
   },
-  "type": "module",
+  "dependencies": {
+    "@inquirer/prompts": "^8.0.2",
+    "@ltd/j-toml": "^1.0.0",
+    "arktype": "^2.1.28",
+    "picocolors": "^1.0.0",
+    "zlye": "^0.4.4"
+  },
   "bin": {
     "ashiba": "./dist/ashiba"
   },
+  "description": "Blazing fast file scaffolding with Bun",
   "scripts": {
     "dev": "bun run src/cli/index.ts",
     "build": "bun build --compile src/cli/index.ts --outfile dist/ashiba",
     "check": "bunx tsc --noEmit",
     "test": "bun test"
   },
-  "dependencies": {
-    "@ltd/j-toml": "^1.0.0",
-    "arktype": "^2.1.28",
-    "picocolors": "^1.0.0",
-    "prompts": "^2.4.2",
-    "zlye": "^0.4.4"
-  },
-  "devDependencies": {
-    "@types/prompts": "^2.4.9"
-  }
+  "type": "module"
 }

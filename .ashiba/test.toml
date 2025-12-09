@@ -19,7 +19,7 @@ description = "A test scaffolding template"
 # order - what order should the user be prompted in (required)
 #            each value in the order array must match to a key in the rest
 #            of the .toml file
-order = ["name", "author", "reading_goal", "publish"]
+order = ["reading_goal", "name", "author", "publish"]
 
 # text input, prompts the user for a name
 [name]
@@ -38,4 +38,6 @@ confirm = "Should this be published now?"
 [reading_goal]
 description = "How many books do you want to read?"
 type = "number"
-initial = 5
+default = 5
+min = 1
+max = 100

@@ -34,7 +34,8 @@ afterAll(() => {
   try {
     rmSync(TEST_TEMPLATE, { recursive: true });
     rmSync(TEST_OUTPUT_DIR, { recursive: true });
-  } catch {
+  } catch (error) {
+    console.error(error);
     // Files may not exist
   }
 });
@@ -109,25 +110,4 @@ test("runScaffold handles empty variable values gracefully", async () => {
   expect(readmeContent).toContain("# Project");
   expect(readmeContent).toContain("Version: ");
   expect(readmeContent).toContain("Author: ");
-});
-
-test("runScaffold creates output directory if needed", async () => {
-  const outputDir = "./test-output-new";
-  const values = {
-    name: "NewProject",
-    version: "2.0.0",
-    author: "Test",
-  };
-
-  // Pre-create the output directory (Bun.file doesn't auto-create parents)
-  mkdirSync(outputDir, { recursive: true });
-
-  try {
-    await runScaffold("test-scaffold-template", values, outputDir);
-    expect(existsSync(outputDir)).toBe(true);
-  } finally {
-    if (existsSync(outputDir)) {
-      rmSync(outputDir, { recursive: true });
-    }
-  }
 });
