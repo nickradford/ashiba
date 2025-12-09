@@ -2,52 +2,128 @@ import * as TOML from "@ltd/j-toml";
 import pc from "picocolors";
 import { type } from "arktype";
 
-// 1) Runtime value type for each dynamic entry. Expandable over time.
-// You can add more fields as needed (e.g., "default", "required", etc.)
-export const TemplateField = type({
-  // allow any future keys -> do not reject undeclared field properties
+// ---------------------------------------------------------------------------
+// 1) TemplateField – typed variants
+// ---------------------------------------------------------------------------
+
+const BaseField = type({
+  __key: "string",
   description: "string?",
-  "[string]": "unknown", // permit additional arbitrary properties on each field object
+  "[string]": "unknown",
 });
+
+export const TextField = BaseField.and(type({ __type: "'string'" }));
+export type TextField = typeof TextField.infer;
+
+export const NumberField = BaseField.and(
+  type({
+    __type: "'number'",
+    min: "number?",
+    max: "number?",
+    initial: "number?",
+  }),
+);
+export type NumberField = typeof NumberField.infer;
+
+export const SelectField = BaseField.and(
+  type({ __type: "'select'", select: "string[]" }),
+);
+export type SelectField = typeof SelectField.infer;
+
+export const ConfirmField = BaseField.and(
+  type({ __type: "'confirm'", confirm: "true" }),
+);
+export type ConfirmField = typeof ConfirmField.infer;
+
+export const TemplateField = TextField.or(NumberField)
+  .or(SelectField)
+  .or(ConfirmField);
 export type TemplateField = typeof TemplateField.infer;
 
-// 2) TypeScript coupling: for every key listed in `order`, there must be
-// a corresponding property with TemplateField value.
-// Extra keys (beyond `order`) are allowed; remove the index signature
-// if you want to disallow extras at the TS level.
+// ---------------------------------------------------------------------------
+// 2) TemplateConfig – TypeScript-level structure
+// ---------------------------------------------------------------------------
+
 export type TemplateConfig<
   Order extends readonly string[] = readonly string[],
 > = {
-  order: Order extends readonly string[] ? Order : readonly string[];
-  description?: string; // optional template-level description
+  order: Order;
+  description?: string;
 } & {
   [K in Order[number]]: TemplateField;
-} & {
-  // allow additional dynamic keys not necessarily listed in `order`
-  [key: string]: TemplateField | Order | string | undefined;
-};
+} & { [key: string]: TemplateField | Order | string | undefined };
 
-// 3) Runtime validator:
-// - order must be an array of strings
-// - any string-keyed property can be a TemplateField or string (for description)
-// - keep the object "open" so future keys are allowed
+// ---------------------------------------------------------------------------
+// 3) Runtime TemplateConfig validator
+// ---------------------------------------------------------------------------
+
+/**
+ * The top-level validator just ensures object-y shape;
+ * individual fields will be verified after normalization.
+ */
 export const TemplateConfigRuntime = type({
-  order: "string[]", // array of strings (any length)
-  // any string key maps to an object (TemplateField) or string (description)
+  order: "string[]",
+  description: "string?",
   "[string]": "object | string",
 });
 
-// Optional: stricter runtime that ensures every key in order exists.
-// ArkType (as of today) can validate shapes and keys individually,
-// but coupling “order elements must exist as keys” is best enforced at TypeScript level.
-// Provide a tiny runtime helper to check presence if you need it:
+// ---------------------------------------------------------------------------
+// 4) Helpers
+// ---------------------------------------------------------------------------
 
 export function validateTemplateConfigPresence<
   T extends { order: string[] } & Record<string, unknown>,
 >(cfg: T): { ok: true } | { ok: false; missing: string[] } {
   const missing = cfg.order.filter((k) => !(k in cfg));
-  return missing.length === 0 ? { ok: true } : { ok: false, missing };
+  return missing.length ? { ok: false, missing } : { ok: true };
 }
+
+/**
+ * Normalize all fields:
+ * - add __key
+ * - infer type if missing
+ * - transform confirm/string -> confirm:true
+ */
+function normalizeKeys(config: any): TemplateConfig {
+  for (const key of config.order) {
+    const field = config[key];
+    if (!field || typeof field !== "object") continue;
+
+    field.__key = key;
+
+    // confirm field using TOML key or string confirm
+    if (typeof field.confirm === "string") {
+      field.description = field.confirm;
+      field.confirm = true;
+    }
+
+    if (field.type === "number") {
+      field.__type = "number";
+      for (const n of ["initial"]) {
+        const val = (field as any)[n];
+        if (typeof val === "string" && !Number.isNaN(+val)) {
+          (field as any)[n] = Number(val);
+        }
+      }
+    }
+
+    // infer types if not declared
+    if ("select" in field && !field.__type) {
+      field.__type = "select";
+    } else if ("confirm" in field && !field.__type) {
+      field.__type = "confirm";
+    } else if (typeof field.__type !== "string") {
+      // default to string input if none provided
+      field.__type = "string";
+    }
+  }
+
+  return config as TemplateConfig;
+}
+
+// ---------------------------------------------------------------------------
+// 5) loadConfig – parse + normalize + validate deeply
+// ---------------------------------------------------------------------------
 
 export async function loadConfig(template: string): Promise<TemplateConfig> {
   const configFile = Bun.file(`.ashiba/${template}.toml`);
@@ -55,7 +131,7 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
     throw new Error(`Config file not found for template: ${template}`);
   }
 
-  const parsed = TOML.parse(await configFile.text(), 1.0) as any;
+  const parsed = TOML.parse(await configFile.text(), { bigint: false }) as any;
 
   const presence = validateTemplateConfigPresence(parsed);
   if (!presence.ok) {
@@ -63,12 +139,27 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
       `Config is missing information for keys: ${presence.missing.join(", ")}`,
     );
   }
-  const config = TemplateConfigRuntime(parsed);
 
-  if (config instanceof type.errors) {
-    console.error(config.issues);
-    throw new Error(config.summary);
+  const coarse = TemplateConfigRuntime(parsed);
+  if (coarse instanceof type.errors) {
+    console.error(pc.red("TemplateConfig validation failed:"));
+    console.error(coarse.issues);
+    throw new Error(coarse.summary);
   }
 
-  return config;
+  const normalized = normalizeKeys(coarse);
+
+  // deep validate each field with TemplateField
+  for (const key of normalized.order) {
+    const field = normalized[key];
+    const valid = TemplateField(field);
+    if (valid instanceof type.errors) {
+      console.error(
+        pc.red(`Validation failed for field "${key}": ${valid.summary}`),
+      );
+      throw new Error(valid.summary);
+    }
+  }
+
+  return normalized;
 }

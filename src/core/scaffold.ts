@@ -27,7 +27,9 @@ export async function runScaffold(
       const inText = await inFile.text();
 
       await outFile.write(tryReplaceString(inText, values));
-      console.log(`Wrote: ${pc.blue(outPath)}`);
+      if (Bun.env.NODE_ENV !== "test") {
+        console.log(`Wrote: ${pc.blue(outPath)}`);
+      }
     }
   }
 }

@@ -1,8 +1,41 @@
-description = "A test scaffolding template"
-order = ["name", "author"]
+# ▄████▄  ▄▄▄▄ ▄▄ ▄▄ ▄▄ ▄▄▄▄   ▄▄▄
+# ██▄▄██ ███▄▄ ██▄██ ██ ██▄██ ██▀██
+# ██  ██ ▄▄██▀ ██ ██ ██ ██▄█▀ ██▀██
+#
+# Blazing fast file scaffolding.
+#
+# This is an example config file for ashiba.
+#
+# Each of the keyed values can be interpolated in nested file names and content
+#
+# ex. If the user submits 2025-goals as the input for [name],
+#     the string {name} will be replaced with 2025-goals in any
+#     nested file names and content.
 
+
+# description - describe what the scaffold is used for (optional)
+description = "A test scaffolding template"
+
+# order - what order should the user be prompted in (required)
+#            each value in the order array must match to a key in the rest
+#            of the .toml file
+order = ["name", "author", "reading_goal", "publish"]
+
+# text input, prompts the user for a name
 [name]
 description = "The name of the file"
 
+# select input, user can only select from the given options
 [author]
 description = "Who is writing the thing?"
+select = ["Larry", "Curly", "Moe"]
+
+# boolean input, interpolated as `true` or `false`
+[publish]
+confirm = "Should this be published now?"
+
+# number input, only accepts numbers
+[reading_goal]
+description = "How many books do you want to read?"
+type = "number"
+initial = 5

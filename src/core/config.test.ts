@@ -10,7 +10,9 @@ import { rmSync } from "node:fs";
 beforeAll(async () => {
   // Create test template directory
   const testDir = ".ashiba/test-template";
-  await Bun.file(`${testDir}.toml`).writer().write(`
+  await Bun.write(
+    `${testDir}.toml`,
+    `
 order = ["name", "version"]
 
 [name]
@@ -18,17 +20,25 @@ description = "Project name"
 
 [version]
 description = "Project version"
-`);
+`,
+  );
 });
 
 afterAll(() => {
-  // Clean up test files
-  try {
-    rmSync(".ashiba/test-template.toml");
-    rmSync(".ashiba/test-missing.toml");
-    rmSync(".ashiba/test-invalid.toml");
-  } catch {
-    // Files may not exist
+  const files = [
+    ".ashiba/test-template.toml",
+    ".ashiba/test-missing.toml",
+    ".ashiba/test-invalid.toml",
+    ".ashiba/test-normalize.toml",
+  ];
+
+  for (const path of files) {
+    try {
+      rmSync(path, { force: true });
+    } catch (error) {
+      // Only show unexpected errors
+      console.error("Failed to remove:", path, error);
+    }
   }
 });
 
@@ -77,14 +87,31 @@ test("validateTemplateConfigPresence returns missing fields", () => {
 
 test("loadConfig throws when order references missing fields", async () => {
   // Create a template with missing field references
-  await Bun.file(".ashiba/test-missing.toml").writer().write(`
+  await Bun.write(
+    ".ashiba/test-missing.toml",
+    `
 order = ["name", "missing_field"]
 
 [name]
 description = "Project name"
-`);
+`,
+  );
 
   expect(async () => {
     await loadConfig("test-missing");
   }).toThrow();
+});
+
+test("loadConfig normalizes the keys into the TemplateField", async () => {
+  await Bun.write(
+    ".ashiba/test-normalize.toml",
+    `
+order = ["name"]
+
+[name]
+description = "Project name"
+`,
+  );
+  const config = await loadConfig("test-normalize");
+  expect(config.name!.__key).toBeDefined();
 });

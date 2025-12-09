@@ -1,3 +1,4 @@
-Hi {author}.
-
-This is a test of Ashiba.
+name: {name}
+author: {author}
+publish: {publish}
+reading goal: {reading_goal}
