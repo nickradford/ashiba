@@ -10,8 +10,12 @@
     "@inquirer/prompts": "^8.0.2",
     "@ltd/j-toml": "^1.0.0",
     "arktype": "^2.1.28",
+    "ashiba": ".",
     "picocolors": "^1.0.0",
     "zlye": "^0.4.4"
+  },
+  "devDependencies": {
+    "@inquirer/testing": "^2.1.0"
   },
   "bin": {
     "ashiba": "./dist/ashiba"
@@ -21,7 +25,8 @@
     "dev": "bun run src/cli/index.ts",
     "build": "bun build --compile src/cli/index.ts --outfile dist/ashiba",
     "check": "bunx tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "clean:test": "rm -rf test"
   },
   "type": "module"
 }

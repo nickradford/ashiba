@@ -11,7 +11,7 @@ import {
   useEffect,
   type Theme,
 } from "@inquirer/core";
-import { type PartialDeep } from "@inquirer/type";
+import { type PartialDeep, type Prompt } from "@inquirer/type";
 import chalk from "picocolors";
 
 type Config = {
@@ -52,17 +52,17 @@ export default createPrompt<number, Config>((config, done) => {
       setStatus("done");
       done(value);
     } else if (isUpKey(key)) {
-     setInputBuffer("");
-     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-     const increment = key.shift ? 10 : interval;
-     const newValue = Math.min(value + increment, max);
-     setValue(newValue);
+      setInputBuffer("");
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      const increment = key.shift ? 10 : interval;
+      const newValue = Math.min(value + increment, max);
+      setValue(newValue);
     } else if (isDownKey(key)) {
-     setInputBuffer("");
-     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-     const decrement = key.shift ? 10 : interval;
-     const newValue = Math.max(value - decrement, min);
-     setValue(newValue);
+      setInputBuffer("");
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      const decrement = key.shift ? 10 : interval;
+      const newValue = Math.max(value - decrement, min);
+      setValue(newValue);
     } else if (key.sequence && /^\d$/.test(key.sequence)) {
       const newBuffer = inputBuffer + key.sequence;
       const parsedValue = Number(newBuffer);
@@ -88,5 +88,5 @@ export default createPrompt<number, Config>((config, done) => {
 
   let arrows = chalk.gray(`\n\n↑↓ +/- • ⏎ select`);
 
-  return `${prefix} ${message} ${formattedValue} ${status === "idle" ? arrows : undefined}`;
+  return `${prefix} ${message} ${formattedValue} ${status === "idle" ? arrows : ""}`;
 });
