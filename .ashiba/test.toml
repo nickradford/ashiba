@@ -1,0 +1,7 @@
+order = ["name", "author"]
+
+[name]
+description = "The name of the file"
+
+[author]
+description = "Who is writing the thing?"
