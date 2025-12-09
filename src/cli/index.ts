@@ -2,6 +2,7 @@ import { cli, z } from "zlye";
 import pkg from "../../package.json";
 import { loadConfig } from "../core/config";
 import { runScaffold } from "../core/scaffold";
+import { getPromptResponses } from "../core/prompt";
 
 const ashiba = cli()
   .name(pkg.name)
@@ -24,9 +25,8 @@ ashiba
   .action(async ({ options, positionals }) => {
     const template = positionals[0];
     const config = await loadConfig(template);
-    console.log("CONFIG", config);
-    console.log(options);
-    await runScaffold(template, config, options.outDir);
+    const responses = await getPromptResponses(config);
+    await runScaffold(template, responses, options.outDir);
   });
 
 ashiba.parse();
