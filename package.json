@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@inquirer/prompts": "^8.0.2",
-    "@ltd/j-toml": "^1.0.0",
+    "smol-toml": "^1.5.2",
     "arktype": "^2.1.28",
     "ashiba": ".",
     "commander": "^14.0.2",

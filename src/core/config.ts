@@ -1,4 +1,4 @@
-import * as TOML from "@ltd/j-toml";
+import { parse } from "smol-toml";
 import pc from "picocolors";
 import { type } from "arktype";
 
@@ -126,7 +126,7 @@ export async function loadConfig(template: string): Promise<TemplateConfig> {
     throw new Error(`Config file not found for template: ${template}`);
   }
 
-  const parsed = TOML.parse(await configFile.text(), { bigint: false }) as any;
+  const parsed = parse(await configFile.text()) as any;
 
   const presence = validateTemplateConfigPresence(parsed);
   if (!presence.ok) {
