@@ -3,6 +3,8 @@
 **Ashiba** (足場) means “scaffolding” in Japanese — a blazing-fast file scaffolding CLI built with **Bun**.  
 Define reusable project templates using TOML, and generate files in miliseconds from the command line.
 
+testing using coderabbit
+
 ---
 
 ## Todo
