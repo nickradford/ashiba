@@ -11,6 +11,7 @@ Define reusable project templates using TOML, and generate files in miliseconds 
 - [x] `ashiba list` list all templates in the current project
 - [x] `ashiba init` create the base ashiba file structure
 - [ ] `ashiba doctor` find issues with the templates (missing keys in config)
+- [ ] automatically generate .toml `order` based on key order in .toml
 - [ ] String transformations (e.g., `{name | slugify}`)
 - [ ] Interactive mode — list templates and create new instance
 - [ ] Website
