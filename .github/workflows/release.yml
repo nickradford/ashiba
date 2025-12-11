@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20.x"
+          node-version: "22.x"
           registry-url: "https://registry.npmjs.org"
 
       - name: Install packages
@@ -36,13 +36,8 @@ jobs:
       - name: Initialize git user
         run: |
           git config --global user.email "nick@nicholasradford.com"
-          git config --global user.name "Release Workflow"
+          git config --global user.name "shiba Release"
 
-      # - name: Initialize npm config
-      #   run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #
       - name: Log diff
         run: |
           git status
@@ -52,18 +47,3 @@ jobs:
         run: bun release --ci --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # - name: Build code
-      #   run: bun run build
-
-      # - name: Test
-      #   run: bun run test
-
-      # - name: Test
-      #   run: bun run test:cf
-
-      # - name: "Publish"
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #   run: |
-      #     npm publish --provenance --access=public
