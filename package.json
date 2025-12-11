@@ -20,7 +20,7 @@
     "release-it": "^19.0.6"
   },
   "bin": {
-    "ashiba": "./dist/ashiba"
+    "ashiba": "dist/ashiba"
   },
   "description": "Blazing fast file scaffolding with Bun",
   "scripts": {
@@ -31,5 +31,8 @@
     "clean:test": "rm -rf test",
     "release": "release-it"
   },
-  "type": "module"
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
 }
