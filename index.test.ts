@@ -9,5 +9,5 @@ test("ashiba package exports main functionality", async () => {
 
 test("build output file is configured", async () => {
   const pkg = await import("./package.json");
-  expect(pkg.bin.ashiba).toBe("./dist/ashiba");
+  expect(pkg.bin.ashiba).toBe("dist/ashiba");
 });
