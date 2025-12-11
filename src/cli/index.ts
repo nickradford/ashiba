@@ -8,7 +8,7 @@ import {
 
 export function createProgram(): Command {
   const program = new Command()
-    .name(pkg.name)
+    .name(pkg.name.split("/")[1]!)
     .description(pkg.description)
     .version(pkg.version);
 

@@ -40,14 +40,14 @@ test("createProgram initializes with name and version", () => {
 
 test("createProgram registers new command", () => {
   const program = createProgram();
-  const newCmd = program.commands.find(c => c.name() === "new");
+  const newCmd = program.commands.find((c) => c.name() === "new");
   expect(newCmd).toBeDefined();
   expect(newCmd?.description()).toContain("Scaffold a new");
 });
 
 test("createProgram registers list command", () => {
   const program = createProgram();
-  const listCmd = program.commands.find(c => c.name() === "list");
+  const listCmd = program.commands.find((c) => c.name() === "list");
   expect(listCmd).toBeDefined();
   expect(listCmd?.description()).toContain("List all available");
 });
