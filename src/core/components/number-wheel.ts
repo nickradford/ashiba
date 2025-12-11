@@ -10,6 +10,7 @@ import {
   useRef,
   useEffect,
   type Theme,
+  type KeypressEvent,
 } from "@inquirer/core";
 import { type PartialDeep, type Prompt } from "@inquirer/type";
 import pc from "picocolors";
@@ -22,6 +23,12 @@ type Config = {
   interval?: number;
   theme?: PartialDeep<Theme>;
 };
+
+// TODO: Refactor this after inquirer.js merges https://github.com/SBoudrias/Inquirer.js/pull/1930
+interface ExtendedKeypressEvent extends KeypressEvent {
+  shift: boolean;
+  sequence: string;
+}
 
 export default createPrompt<number, Config>((config, done) => {
   const {
@@ -45,8 +52,15 @@ export default createPrompt<number, Config>((config, done) => {
     };
   }, []);
 
-  useKeypress((key) => {
+  useKeypress((_key) => {
     if (status !== "idle") return;
+
+    // TODO: Refactor after inquirer.js merges my PR
+    const key: ExtendedKeypressEvent = {
+      ..._key,
+      shift: (_key as any).shift,
+      sequence: (_key as any).sequence,
+    };
 
     if (isEnterKey(key)) {
       setStatus("done");
@@ -64,7 +78,7 @@ export default createPrompt<number, Config>((config, done) => {
       const newValue = Math.max(value - decrement, min);
       setValue(newValue);
     } else if (key.sequence && /^\d$/.test(key.sequence)) {
-      const newBuffer = inputBuffer + key.sequence;
+      const newBuffer = inputBuffer + (key as any).sequence;
       const parsedValue = Number(newBuffer);
 
       if (parsedValue >= min && parsedValue <= max) {
