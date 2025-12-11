@@ -44,6 +44,6 @@ jobs:
           git diff
 
       - name: Run release
-        run: bun release --ci --verbose
+        run: NODE_AUTH_TOKEN="" bun release --ci --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
