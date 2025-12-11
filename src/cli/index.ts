@@ -1,10 +1,6 @@
 import { Command } from "commander";
 import pkg from "../../package.json";
-import {
-  registerNewCommand,
-  registerListCommand,
-  registerInitCommand,
-} from "@cli/commands";
+import { registerNewCommand, registerListCommand, registerInitCommand } from "@cli/commands";
 
 export function createProgram(): Command {
   const program = new Command()

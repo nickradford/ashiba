@@ -5,22 +5,6 @@ Define reusable project templates using TOML, and generate files in miliseconds 
 
 ---
 
-## Todo
-
-- [x] actually scaffold the template out with variable interpolation
-- [x] `ashiba list` list all templates in the current project
-- [x] `ashiba init` create the base ashiba file structure
-- [ ] `ashiba doctor` find issues with the templates (missing keys in config)
-- [ ] automatically generate .toml `order` based on key order in .toml
-- [ ] String transformations (e.g., `{name | slugify}`)
-- [ ] Interactive mode — list templates and create new instance
-- [ ] Website
-- [ ] Template registry? Inspired by shadcn registry
-- [ ] Explore using handlebars for flow control in templates
-- [ ] Changelog & semver
-
----
-
 ## ✨ Features
 
 - ⚡ **Instant startup** — built on Bun, optimized for speed
@@ -37,7 +21,7 @@ Define reusable project templates using TOML, and generate files in miliseconds 
 Once published, install globally with Bun:
 
 ```bash
-bun install -g ashiba
+bun install -g @ashiba-dev/ashiba
 ```
 
 For local development:
@@ -64,6 +48,7 @@ Create a `.ashiba` directory in your project root:
 Define your scaffold config in `blog-post.toml`:
 
 ```toml
+description = "A basic blog post template"
 order = ["title", "author"]
 
 [title]
@@ -77,7 +62,7 @@ select = ["Nick", "Alice", "Jean"]
 Then generate your scaffold:
 
 ```bash
-ashiba new blog-post
+ashiba new blog-post -o path/to/where/you/want/the/generated/files
 ```
 
 You’ll be prompted for each field:
