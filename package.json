@@ -37,5 +37,9 @@
   "type": "module",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=11.5.0"
   }
 }
