@@ -1,6 +1,0 @@
-[build]
-entrypoints = ["src/cli.ts"]
-outdir = "dist"
-
-[install]
-registry = "https://registry.npmjs.org"
