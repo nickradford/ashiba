@@ -6,6 +6,9 @@
     "email": "nick@nickradford.dev",
     "url": "https://nickradford.dev"
   },
+  "repository": {
+    "url": "https://github.com/nickradford/ashiba"
+  },
   "dependencies": {
     "@inquirer/prompts": "^8.0.2",
     "smol-toml": "^1.5.2",
