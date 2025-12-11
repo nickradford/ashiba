@@ -15,7 +15,8 @@
     "picocolors": "^1.0.0"
   },
   "devDependencies": {
-    "@inquirer/testing": "^2.1.0"
+    "@inquirer/testing": "^2.1.0",
+    "release-it": "^19.0.6"
   },
   "bin": {
     "ashiba": "./dist/ashiba"
@@ -26,7 +27,8 @@
     "build": "bun build --compile --minify src/cli/index.ts --outfile dist/ashiba",
     "check": "bunx tsc --noEmit",
     "test": "bun test",
-    "clean:test": "rm -rf test"
+    "clean:test": "rm -rf test",
+    "release": "release-it"
   },
   "type": "module"
 }
